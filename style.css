@@ -1,17 +1,19 @@
 #pageContent {
     display: flex;
     justify-content: center;
+    font-family: 'Orbitron', sans-serif;
 }
 #calculator {
     width: 600px;
     height: 800px;
-    background-color: gray;
+    background-color: transparent;
+    border-radius: 25px;
     display: flex;
     flex-direction: column;
 }
 
 #display {
-    background-color: rgb(73, 73, 73);
+    background-color: rgb(36, 36, 36);
     height: 100px;
     width: 500px;
     margin: 50px;
@@ -23,6 +25,7 @@
 #displayText {
     margin-right: 20px;
     font-size: 60px;
+    color: rgb(0, 255, 13);
 }
 
 #buttonsHolder {
@@ -40,27 +43,50 @@
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: bottom;
+    background-image: linear-gradient(rgb(67, 139, 139), rgb(39, 66, 73));
     
 }
 
 .digit {
     height: 100px;
     width: 100px;
-    background-color: black;
+    background-color: transparent;
     color: white;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     flex: 125px;
+
+}
+
+.digit:hover {
+    background-color: rgba(15, 15, 15, 50%);
+    transition: ease-in .1s;
 }
 
 #executeOperation {
     background-color:cornflowerblue;
 }
 
+#executeOperation.digit:hover {
+    background-color:rgb(87, 130, 209);
+}
+
+#removeLast {
+    background-color: rgba(156, 87, 87, 0.377);
+}
+
+#removeLast:hover {
+    background-color: rgba(187, 104, 104, 0.712);
+}
+
 #squared2 {
     font-size: small;
+}
+
+#removeLastX {
+    font-size: medium;
 }
 
 .number {
