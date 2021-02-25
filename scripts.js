@@ -113,7 +113,7 @@ function operatorClicked(eventData) {
 function insertDisplay (input) {
     let displayText = document.getElementById('displayText')
 	let currentlyOnscreen = displayText.textContent;
-    let isFirstNumber = true;
+
 	//Checks if the number onscreen is 0
 	if (currentlyOnscreen === '0') {
 	
@@ -126,11 +126,11 @@ function insertDisplay (input) {
 			if (numberCheck(input)) {
 				decimalAllowed = true;
 				isFirstNumber = false;
-				console.log('change to ' + decimalAllowed);
+
 			}
 			if (input === '.') {
 				decimalAllowed = false;
-				console.log('change to ' + decimalAllowed);
+
 			}
 			
 		}
@@ -141,7 +141,6 @@ function insertDisplay (input) {
 		let onscreenLength = currentlyOnscreen.length
 		let previousChar = currentlyOnscreen.charAt(onscreenLength - 1);
 		let last2Chars = currentlyOnscreen.charAt(onscreenLength - 2) + previousChar;
-		console.log('previousChar ' + previousChar);
 
 		//Only allows close parenthesis where valid
 		if (input === '(') {
@@ -237,8 +236,7 @@ function insertDisplay (input) {
 				previousChar !== '.'
 				&& previousChar !== '÷'
 				&& previousChar !== '*'
-				&& previousChar !== '-'
-				&& previousChar !== '+'
+				&& last2Chars !== '--'
 				){
 				displayText.textContent = currentlyOnscreen + input;
 				decimalAllowed = true;
@@ -268,13 +266,13 @@ function insertDisplay (input) {
 	
 		//Checks to see if the input is a number
 		let isNumber = numberCheck(input);
-		console.log('is number: ' + isNumber);	
+	
 		
 		//Checks to see if the input is a number
 		if (isNumber === true && previousChar === '.') {
 			displayText.textContent = currentlyOnscreen + input;
 			decimalAllowed = false;
-			console.log('after decimal')
+
 		
 		} else if (isNumber === true
 			&& (previousChar === '+' 
@@ -284,24 +282,23 @@ function insertDisplay (input) {
 			|| previousChar === '(')
 			){
 			decimalAllowed = true;
-			console.log('num input change to ' + decimalAllowed);
+
 			displayText.textContent = currentlyOnscreen + input;
 		} else if (isNumber === true && numberCheck(previousChar) === true){
-			console.log('num after num');
+
 			displayText.textContent = currentlyOnscreen + input;
 		}
 
 		
 		//Only allows decimals where valid
 		if (input === '.') {
-			console.log('decimal state: ' + decimalAllowed);
 			if (previousChar === '.') {
 				input = '';
 				displayText.textContent = currentlyOnscreen + input;
 			} else if (decimalAllowed === true) {
 				displayText.textContent = currentlyOnscreen + input;
 				decimalAllowed = false;
-				console.log('decimal state after: ' + decimalAllowed);
+
 			}
 		}
 
@@ -421,11 +418,140 @@ function beginExecution() {
 	executionContinued(currentlyOnscreen);
 }
 
+function squareRoot (fromDisplay) {
+	if (fromDisplay.includes('√')) {
+		let rootCount = (fromDisplay.match(/√/g) || []).length;
+		for (i=0; i < rootCount; i++) {
+			let rootIndex = fromDisplay.indexOf('√');
+			let openIndex = fromDisplay.indexOf('(', rootIndex);
+			let closeIndex = fromDisplay.indexOf(')', rootIndex);
+			let insideSquareParenthesis = fromDisplay.slice(openIndex + 1, closeIndex);
+			squareRooted = Math.sqrt(insideSquareParenthesis);
+			displayText.textContent = squareRooted;
+			fromDisplay = fromDisplay.slice(0,rootIndex) + squareRooted + fromDisplay.slice(closeIndex + 1);
+			return fromDisplay;
+		}
+	} else {
+		return fromDisplay;
+	}
+}
+
+function square (fromDisplay) {
+	if (fromDisplay.includes('^2')) {
+		let squareCount = (fromDisplay.match(/^/g) || []).length;
+		let equalToCount = squareCount;
+		for (i=0; i < squareCount; i++) {
+			if (equalToCount < 2) {
+				console.log('just squaring one');
+				let squareIndex = fromDisplay.indexOf('^');
+				let toBeSquared = fromDisplay.slice(0, squareIndex);
+				console.log(toBeSquared);
+				squared = toBeSquared ** 2;
+				fromDisplay = squared;
+				displayText.textContent = squared;
+				console.log(fromDisplay);
+				return fromDisplay;
+			} /*else {
+				console.log('adding more than two numbers');
+				additionIndex = fromDisplay.indexOf('+');
+				nextAdditionIndex = fromDisplay.indexOf('+', additionIndex + 1);
+				let num1 = fromDisplay.slice(0, additionIndex);
+				let num2 = fromDisplay.slice(additionIndex + 1, nextAdditionIndex)
+				let added = Number(num1) + Number(num2);
+				console.log('added ' + added);
+				fromDisplay = added + fromDisplay.slice(nextAdditionIndex);
+				console.log('fromDis ' + fromDisplay);
+				equalToCount--;
+			}*/
+		}
+	} else {
+		return fromDisplay;
+	}
+}
+
+function add (fromDisplay) {
+	if (fromDisplay.includes('+')) {
+		console.log('has plus sign');
+		let additionCount = (fromDisplay.match(/\+/g) || []).length;
+		let equalToCount = additionCount;
+		for (i=0; i < additionCount; i++) {
+			if (equalToCount < 2) {
+				console.log('adding two numbers');
+				let additionIndex = fromDisplay.indexOf('+');
+				let num1 = fromDisplay.slice(0, additionIndex);
+				let num2 = fromDisplay.slice(additionIndex + 1)
+				let added = Number(num1) + Number(num2);
+				console.log(fromDisplay);
+				fromDisplay = added;
+				displayText.textContent = added;
+			} else {
+				console.log('adding more than two numbers');
+				additionIndex = fromDisplay.indexOf('+');
+				nextAdditionIndex = fromDisplay.indexOf('+', additionIndex + 1);
+				let num1 = fromDisplay.slice(0, additionIndex);
+				let num2 = fromDisplay.slice(additionIndex + 1, nextAdditionIndex)
+				let added = Number(num1) + Number(num2);
+				console.log('added ' + added);
+				fromDisplay = added + fromDisplay.slice(nextAdditionIndex);
+				console.log('fromDis ' + fromDisplay);
+				equalToCount--;
+			}
+		}
+		return fromDisplay; 
+	} else {
+		return fromDisplay;
+	}
+}
+
+function subtract (fromDisplay) {
+	if (fromDisplay.includes('-')) {
+		console.log('has minus sign');
+		let subtractionCount = (fromDisplay.match(/\-/g) || []).length;
+		let equalToCount = subtractionCount;
+		for (i=0; i < subtractionCount; i++) {
+			if (equalToCount < 2) {
+				console.log('subtracting two numbers');
+				let subtractionIndex = fromDisplay.indexOf('-');
+				let num1 = fromDisplay.slice(0, subtractionIndex);
+				let num2 = fromDisplay.slice(subtractionIndex + 1)
+				let subtracted = Number(num1) - Number(num2);
+				console.log(fromDisplay);
+				fromDisplay = subtracted;
+				displayText.textContent = subtracted;
+			} else {
+				console.log('subtracting more than two numbers');
+				subtractionIndex = fromDisplay.indexOf('-');
+				nextSubtractionIndex = fromDisplay.indexOf('-', subtractionIndex + 1);
+				let num1 = fromDisplay.slice(0, subtractionIndex);
+				let num2 = fromDisplay.slice(subtractionIndex + 1, nextSubtractionIndex)
+				let subtracted = Number(num1) - Number(num2);
+				console.log('subtracted ' + subtracted);
+				fromDisplay = subtracted + fromDisplay.slice(nextSubtractionIndex);
+				console.log('fromDis ' + fromDisplay);
+				equalToCount--;
+			}
+		}
+		return fromDisplay; 
+	} else {
+		return fromDisplay;
+	}
+}
+
 function executionContinued (input) {
 	let fromDisplay = input;
 	let i = 0;
 	let fromParenthesis = [];
+	fromDisplay = square(fromDisplay);
+	console.log('after sqr ' + fromDisplay);
+	fromDisplay = squareRoot(fromDisplay);
+	console.log('after sqrrt ' + fromDisplay);
 	
+
+	fromDisplay = add(fromDisplay);
+	console.log('after add ' + fromDisplay);
+	fromDisplay = subtract(fromDisplay);
+	console.log('after subtract ' + fromDisplay);
+
 	if (fromDisplay.includes('(' && ')')) {
 		while (fromDisplay.includes('(' && ')')) {
 			let openIndex = fromDisplay.indexOf('(');
@@ -442,7 +568,8 @@ function executionContinued (input) {
 			fromDisplay = withoutParenthesis.slice(1);
 			console.log(fromParenthesis);
 		}
-	} else if (fromDisplay.includes('^2') && (!fromDisplay.includes('(' && ')'))) {
+	} else if (fromDisplay.includes('^2') 
+		&& (!fromDisplay.includes('(' && ')'))) {
 		if (fromDisplay.includes('+' || '-' || '*' || '÷' || '√')) {
 			console.log('extra');
 		} else {
@@ -467,17 +594,55 @@ function executionContinued (input) {
 	} else if (fromDisplay.includes('÷')
 	&& (!fromDisplay.includes('(' && ')'))
 	&& (!fromDisplay.includes('^2'))
-	) {
-	if (fromDisplay.includes('+' || '-' || '^2' || '*' || '√')) {
+	&& (!fromDisplay.includes('*'))
+	) { 
+		if (fromDisplay.includes('+' || '-' || '^2' || '*' || '√')) {
 		console.log('extra');
-	} else {
-		let multiplyIndex = fromDisplay.indexOf('*');
-		let firstNum = fromDisplay.slice(0, multiplyIndex);
-		let nextNum = fromDisplay.slice(multiplyIndex + 1,)
-		multiplied = firstNum * nextNum;
-		displayText.textContent = multiplied;
-	}
-	
+		} else {
+			let divideIndex = fromDisplay.indexOf('÷');
+			let firstNum = fromDisplay.slice(0, divideIndex);
+			let nextNum = fromDisplay.slice(divideIndex + 1,)
+			if (nextNum === 0 || nextNum === '0') {
+				displayText.textContent = 'CANNOT ÷ BY 0, NICE TRY';
+			} else {
+				divided = firstNum / nextNum;
+				displayText.textContent = divided;
+			}
+			
+			
+		}
+	} else if (fromDisplay.includes('+')
+	&& (!fromDisplay.includes('(' && ')'))
+	&& (!fromDisplay.includes('^2'))
+	&& (!fromDisplay.includes('*'))
+	&& (!fromDisplay.includes('÷'))
+	) {
+		if (fromDisplay.includes('-' || '^2' || '*' || '√')) {
+			console.log('extra');
+		} else {
+			let addIndex = fromDisplay.indexOf('+');
+			let firstNum = fromDisplay.slice(0, addIndex);
+			let nextNum = fromDisplay.slice(addIndex + 1,)
+			added = Number(firstNum) + Number(nextNum);
+			displayText.textContent = added;
+		}
+	} else if (fromDisplay.includes('-')
+	&& (!fromDisplay.includes('(' && ')'))
+	&& (!fromDisplay.includes('^2'))
+	&& (!fromDisplay.includes('*'))
+	&& (!fromDisplay.includes('÷'))
+	&& (!fromDisplay.includes('+'))
+	) { 
+		if (fromDisplay.includes('+' || '^2' || '*' || '√')) {
+			console.log('extra');
+		} else {
+			console.log('subtraction');
+			let subtractIndex = fromDisplay.lastIndexOf('-');
+			let firstNum = fromDisplay.slice(0, subtractIndex);
+			let nextNum = fromDisplay.slice(subtractIndex + 1,)
+			subtracted = Number(firstNum) - Number(nextNum);
+			displayText.textContent = subtracted;
+		} 
 	for (i = 0; i < fromParenthesis.length; i++ ) {
 		//(!fromParenthesis[i].includes('^2'))
 		console.log(fromParenthesis[i]);
@@ -502,7 +667,7 @@ function findParenthesis () {
 }
 
 //Needs to add
-function add () {
+/*function add () {
 	let value = 0;
 	for (i = (arguments.length - 1); i >=0; i--) {
 		value = value + arguments[i];
@@ -519,7 +684,7 @@ function subtract () {
 	}
 
 	return value;
-}
+}*/
 
 //Needs to multiply
 function multiply (array) {
@@ -532,13 +697,13 @@ function multiply (array) {
 	return value;
 }
 
-//Squares a number
+/*//Squares a number
 function square() {
 	let value = arguments[0];
 	value = value ** 2;
 	
 	return value;
-}
+}*/
 
 //Raises a number to a power
 function power() {
