@@ -113,27 +113,52 @@ function operatorClicked(eventData) {
 function insertDisplay (input) {
     let displayText = document.getElementById('displayText')
 	let currentlyOnscreen = displayText.textContent;
-
-    //Checks if the number onscreen is 0
+    let isFirstNumber = true;
+	//Checks if the number onscreen is 0
 	if (currentlyOnscreen === '0') {
+	
 		
 		//Prevents inputting operators where they are invalid when the display is empty
 		if (input !== '+' && input !== '*' && input !== '÷' && input !== ')' && input !== '^2') {
+			
 			displayText.textContent = input;
-			//currentlyOnscreen = displayText.textContent;
+			
+			if (numberCheck(input)) {
+				decimalAllowed = true;
+				isFirstNumber = false;
+				console.log('change to ' + decimalAllowed);
+			}
+			if (input === '.') {
+				decimalAllowed = false;
+				console.log('change to ' + decimalAllowed);
+			}
+			
 		}
 	
 	
     } else {
         //Stops inputting of operators if the textContent is only a subtraction symbol
 		let onscreenLength = currentlyOnscreen.length
-		let lastChar = currentlyOnscreen.charAt(onscreenLength - 1);
-		let last2Chars = currentlyOnscreen.charAt(onscreenLength - 2) + lastChar;
+		let previousChar = currentlyOnscreen.charAt(onscreenLength - 1);
+		let last2Chars = currentlyOnscreen.charAt(onscreenLength - 2) + previousChar;
+		console.log('previousChar ' + previousChar);
+
+		//Only allows close parenthesis where valid
+		if (input === '(') {
+			if (previousChar != '.') {
+				displayText.textContent = currentlyOnscreen + input;
+				decimalAllowed = true;
+			} else {
+				input = '';
+				displayText.textContent = currentlyOnscreen + input;
+			}
+		}
 		
 		//Only allows close parenthesis where valid
 		if (input === ')') {
 			if (currentlyOnscreen.includes('(')) {
 				displayText.textContent = currentlyOnscreen + input;
+				decimalAllowed = false;
 			} else if (!currentlyOnscreen.includes('(')) {
 				input = '';
 				displayText.textContent = currentlyOnscreen + input;
@@ -144,23 +169,26 @@ function insertDisplay (input) {
 		if (input === '^2') {
 			if (
 				last2Chars !== '^2' 
-				&& lastChar !== '('
-				&& lastChar !== '÷'
-				&& lastChar !== '*'
-				&& lastChar !== '-'
-				&& lastChar !== '+'
+				&& previousChar !== '('
+				&& previousChar !== '÷'
+				&& previousChar !== '*'
+				&& previousChar !== '-'
+				&& previousChar !== '+'
+				&& previousChar !== '.'
 				){
 				displayText.textContent = currentlyOnscreen + input;
+				decimalAllowed = false;
 			} else {
 				input = '';
 				displayText.textContent = currentlyOnscreen + input;
 			}	
 		}
 		 
-	//Only allows square root where valid
+		//Only allows square root where valid
 		if (input === '√(') {
-			if ( lastChar !== '.'){
+			if ( previousChar !== '.'){
 				displayText.textContent = currentlyOnscreen + input;
+				decimalAllowed = true;
 			} else {
 				input = '';
 				displayText.textContent = currentlyOnscreen + input;
@@ -170,14 +198,15 @@ function insertDisplay (input) {
 		//Only allows division where valid
 		if (input === '÷') {
 			if ( 
-				lastChar !== '.'
-				&& lastChar !== '('
-				&& lastChar !== '÷'
-				&& lastChar !== '*'
-				&& lastChar !== '-'
-				&& lastChar !== '+'
+				previousChar !== '.'
+				&& previousChar !== '('
+				&& previousChar !== '÷'
+				&& previousChar !== '*'
+				&& previousChar !== '-'
+				&& previousChar !== '+'
 				){
 				displayText.textContent = currentlyOnscreen + input;
+				decimalAllowed = true;
 			} else {
 				input = '';
 				displayText.textContent = currentlyOnscreen + input;
@@ -187,14 +216,15 @@ function insertDisplay (input) {
 		//Only allows multiplication where valid
 		if (input === '*') {
 			if ( 
-				lastChar !== '.'
-				&& lastChar !== '('
-				&& lastChar !== '÷'
-				&& lastChar !== '*'
-				&& lastChar !== '-'
-				&& lastChar !== '+'
+				previousChar !== '.'
+				&& previousChar !== '('
+				&& previousChar !== '÷'
+				&& previousChar !== '*'
+				&& previousChar !== '-'
+				&& previousChar !== '+'
 				){
 				displayText.textContent = currentlyOnscreen + input;
+				decimalAllowed = true;
 			} else {
 				input = '';
 				displayText.textContent = currentlyOnscreen + input;
@@ -204,13 +234,14 @@ function insertDisplay (input) {
 		//Only allows subtraction where valid
 		if (input === '-') {
 			if ( 
-				lastChar !== '.'
-				&& lastChar !== '÷'
-				&& lastChar !== '*'
-				&& lastChar !== '-'
-				&& lastChar !== '+'
+				previousChar !== '.'
+				&& previousChar !== '÷'
+				&& previousChar !== '*'
+				&& previousChar !== '-'
+				&& previousChar !== '+'
 				){
 				displayText.textContent = currentlyOnscreen + input;
+				decimalAllowed = true;
 			} else {
 				input = '';
 				displayText.textContent = currentlyOnscreen + input;
@@ -220,34 +251,99 @@ function insertDisplay (input) {
 		//Only allows addition where valid
 		if (input === '+') {
 			if ( 
-				lastChar !== '.'
-				&& lastChar !== '('
-				&& lastChar !== '÷'
-				&& lastChar !== '*'
-				&& lastChar !== '-'
-				&& lastChar !== '+'
+				previousChar !== '.'
+				&& previousChar !== '('
+				&& previousChar !== '÷'
+				&& previousChar !== '*'
+				&& previousChar !== '-'
+				&& previousChar !== '+'
 				){
 				displayText.textContent = currentlyOnscreen + input;
+				let decimalAllowed = true;
 			} else {
 				input = '';
 				displayText.textContent = currentlyOnscreen + input;
 			}	
 		}
 	
-		//!Still adds decimals when not allowed to!
+		//Checks to see if the input is a number
+		let isNumber = numberCheck(input);
+		console.log('is number: ' + isNumber);	
+		
+		//Checks to see if the input is a number
+		if (isNumber === true && previousChar === '.') {
+			displayText.textContent = currentlyOnscreen + input;
+			decimalAllowed = false;
+			console.log('after decimal')
+		
+		} else if (isNumber === true
+			&& (previousChar === '+' 
+			|| previousChar === '-'
+			|| previousChar === '*'
+			|| previousChar === '÷'
+			|| previousChar === '(')
+			){
+			decimalAllowed = true;
+			console.log('num input change to ' + decimalAllowed);
+			displayText.textContent = currentlyOnscreen + input;
+		} else if (isNumber === true && numberCheck(previousChar) === true){
+			console.log('num after num');
+			displayText.textContent = currentlyOnscreen + input;
+		}
+
+		
+		//Only allows decimals where valid
 		if (input === '.') {
-			if (lastChar !== '.'){
-				displayText.textContent = currentlyOnscreen + input;
-			} else {
+			console.log('decimal state: ' + decimalAllowed);
+			if (previousChar === '.') {
 				input = '';
 				displayText.textContent = currentlyOnscreen + input;
-			}	
+			} else if (decimalAllowed === true) {
+				displayText.textContent = currentlyOnscreen + input;
+				decimalAllowed = false;
+				console.log('decimal state after: ' + decimalAllowed);
+			}
 		}
-			
+
+
+		/*if (input === '.') {
+			console.log('in decimal input');
+			console.log('decimal state: ' + decimalAllowed);
+			if (decimalAllowed === false) {
+				console.log('decimal denied');
+				input = '';
+				displayText.textContent = currentlyOnscreen + input;
+			} else if (decimalAllowed = true 
+				&& previousChar != '.'
+				&& (previousChar === '+' 
+				|| previousChar === '-'
+				|| previousChar === '*'
+				|| previousChar === '÷')
+				){
+				console.log('fresh decimal accepted');
+				displayText.textContent = currentlyOnscreen + input;
+				decimalAllowed = false;
+			} else if (decimalAllowed = true) {
+				console.log('number decimal accepted');
+				displayText.textContent = currentlyOnscreen + input;
+				decimalAllowed = false;
+				console.log('change to ' + decimalAllowed);
+			} else {
+				
+			}		
+		}*/
 		
-		displayText.textContent = currentlyOnscreen + input;
 	}
     
+}
+
+
+function numberCheck (input) {
+	if (input >= 0 && input <= 9) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 //removes the last things added to the display
@@ -255,8 +351,8 @@ function removeLast() {
 	let displayText = document.getElementById('displayText')
 	let textContent = displayText.textContent;
 	let textContentLength = textContent.length;
-	let lastChar = textContent.charAt(textContentLength - 1);
-	let last2Chars = textContent.charAt(textContentLength - 2) + lastChar;
+	let previousChar = textContent.charAt(textContentLength - 1);
+	let last2Chars = textContent.charAt(textContentLength - 2) + previousChar;
 	if (textContent) {
 		//removes both parts of the square root upon button click
 		if (last2Chars === '√(') {
