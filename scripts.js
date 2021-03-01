@@ -418,6 +418,78 @@ function beginExecution() {
 	executionContinued(currentlyOnscreen);
 }
 
+function parenthesis (fromDisplay) {
+	if (fromDisplay.includes (')')) {
+		
+		let parenthesisCount = (fromDisplay.match(/\)/g) || []).length;
+		let equalToCount = parenthesisCount;
+		console.log(equalToCount);
+		for (i=0; i < equalToCount; i++) {	
+			console.log('started loop');
+			console.log(i);
+			if (equalToCount < 2) {
+				console.log('1 set of ()')
+				if (fromDisplay.includes('√')) {
+					return fromDisplay;
+				} else {
+					let openIndex = fromDisplay.indexOf('(');
+					let closeIndex = fromDisplay.indexOf(')');
+					let insideParenthesis = fromDisplay.slice(openIndex + 1, closeIndex);
+					let lastPiece = fromDisplay.slice(closeIndex + 1);
+					console.log('1 set of () ' + insideParenthesis);
+					insideParenthesis = square(insideParenthesis);
+					insideParenthesis = multiply(insideParenthesis);
+					insideParenthesis = divide(insideParenthesis);
+					insideParenthesis = add(insideParenthesis);
+					insideParenthesis = subtract(insideParenthesis);
+					if (fromDisplay.charAt(0) === '(') {
+						let parenthesisEvaluated = insideParenthesis + lastPiece;
+						return parenthesisEvaluated;
+					} else {
+						let firstPiece = fromDisplay.slice(0, openIndex);
+						console.log(firstPiece);
+						if (fromDisplay.charAt(fromDisplay.length - 1) === ')') {
+							let parenthesisEvaluated = firstPiece + insideParenthesis;
+							return parenthesisEvaluated;
+						} else {
+							console.log(lastPiece);
+							let parenthesisEvaluated = firstPiece + insideParenthesis + lastPiece;
+							return parenthesisEvaluated;
+						}
+						
+					}
+				}	
+			} else {
+				console.log('more than one set of parenthesis');
+				let openIndex = fromDisplay.lastIndexOf('(');
+				let closeIndex = fromDisplay.indexOf(')', openIndex);
+				let insideParenthesis = fromDisplay.slice(openIndex + 1, closeIndex);
+				let firstPiece = fromDisplay.slice(0, openIndex);
+				let lastPiece = fromDisplay.slice(closeIndex + 1);
+				/*console.log(insideParenthesis);
+				insideParenthesis = square(insideParenthesis);
+				insideParenthesis = multiply(insideParenthesis);
+				insideParenthesis = divide(insideParenthesis);
+				insideParenthesis = add(insideParenthesis);
+				insideParenthesis = subtract(insideParenthesis);
+				console.log(insideParenthesis); */
+				parenthesisEvaluated = firstPiece + insideParenthesis + lastPiece;
+				console.log(parenthesisEvaluated);
+				fromDisplay = parenthesisEvaluated;
+				equalToCount--;
+				console.log(equalToCount);
+				
+				//!--Problem is here --!
+				return ':o';
+			}
+			
+		}	
+	} else {
+		console.log('leaving () ');
+		return fromDisplay;
+	}
+}
+
 function squareRoot (fromDisplay) {
 	if (fromDisplay.includes('√')) {
 		let rootCount = (fromDisplay.match(/√/g) || []).length;
@@ -440,6 +512,8 @@ function squareRoot (fromDisplay) {
 				console.log(toBeSquareRooted);
 				toBeSquareRooted = multiply(toBeSquareRooted);
 				console.log(toBeSquareRooted);
+				toBeSquareRooted = divide(toBeSquareRooted);
+				console.log(toBeSquareRooted);
 				toBeSquareRooted = add(toBeSquareRooted);
 				console.log(toBeSquareRooted);
 				toBeSquareRooted = subtract(toBeSquareRooted);
@@ -447,7 +521,7 @@ function squareRoot (fromDisplay) {
 				squareRooted = Math.sqrt(toBeSquareRooted);
 				displayText.textContent = squareRooted;
 				fromDisplay = fromDisplay.slice(0,rootIndex) + squareRooted + fromDisplay.slice(closeIndex + 1);
-				return fromDisplay
+				return fromDisplay;
 
 			} else {
 				console.log('did not contain other operations');
@@ -472,6 +546,7 @@ function square (fromDisplay) {
 				console.log('just squaring one');
 				let squareIndex = fromDisplay.indexOf('^');
 				let toBeSquared = fromDisplay.slice(0, squareIndex);
+				let twoIndex = fromDisplay.indexOf('2', squareIndex + 1);
 				console.log(toBeSquared);
 				squared = toBeSquared ** 2;
 				console.log(squared);
@@ -570,6 +645,58 @@ function multiply (fromDisplay) {
 	}
 }
 
+function divide (fromDisplay) {
+	if (fromDisplay.includes('÷')) {
+		console.log('has division symbol');
+		let divideCount = (fromDisplay.match(/÷/g) || []).length;
+		let equalToCount = divideCount;
+		for (i=0; i < divideCount; i++) {
+			if (equalToCount < 2) {
+				console.log('just dividing one');
+				let divideIndex = fromDisplay.indexOf('÷');
+				let num1 = fromDisplay.slice(0, divideIndex);
+				let num2 = fromDisplay.slice(divideIndex + 1);
+				divided = num1 / num2;
+				console.log(divided);
+				if (fromDisplay.includes('+' || '-' || '^' || '√' || '*' )) {
+					let withoutSquared = fromDisplay = fromDisplay.slice(twoIndex + 1);
+					let firstChar = fromDisplay.charAt(0);
+					if (!(firstChar >= 0 && firstChar <= 9)) {
+						moveToBack = fromDisplay[0];
+						fromDisplay = fromDisplay.slice(1);
+						fromDisplay = fromDisplay + moveToBack + squared;
+						console.log('fromDis ' + fromDisplay);
+						return fromDisplay.toString();
+					}
+				} else {
+					fromDisplay = divided;
+					displayText.textContent = divided;
+					console.log(fromDisplay);
+					return fromDisplay.toString();
+				}
+				
+			} else {	
+				console.log('dividing more than two numbers');
+				divideIndex = fromDisplay.indexOf('÷');
+				nextIndex = fromDisplay.indexOf('÷', divideIndex + 1);
+				num1 = fromDisplay.slice(0, divideIndex);
+				num2 = fromDisplay.slice(divideIndex + 1, nextIndex);
+				console.log(num1 + '' + num2);
+				divided = num1 / num2;
+				console.log(divided);
+				fromDisplay = divided + '÷' + fromDisplay.slice(nextIndex + 1);
+				console.log('from display: ' + fromDisplay);
+				
+			equalToCount--;
+			}
+		} 
+
+		return fromDisplay.toString(); 
+	} else {
+		return fromDisplay;
+	}
+}
+
 function add (fromDisplay) {
 	if (fromDisplay.includes('+')) {
 		console.log('has plus sign');
@@ -643,6 +770,9 @@ function executionContinued (input) {
 	let i = 0;
 	let fromParenthesis = [];
 	
+	fromDisplay = parenthesis(fromDisplay);
+	console.log('after parenthesis ' + fromDisplay);
+	
 	fromDisplay = squareRoot(fromDisplay);
 	console.log('after sqrrt ' + fromDisplay);
 
@@ -651,8 +781,13 @@ function executionContinued (input) {
 	
 	fromDisplay = multiply(fromDisplay);
 	console.log('after multiply ' + fromDisplay);
+
+	fromDisplay = divide(fromDisplay);
+	console.log('after divide ' + fromDisplay);
+	
 	fromDisplay = add(fromDisplay);
 	console.log('after add ' + fromDisplay);
+	
 	fromDisplay = subtract(fromDisplay);
 	console.log('after subtract ' + fromDisplay);
 
