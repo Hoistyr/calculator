@@ -19,8 +19,8 @@ function loadButtons() {
     getExecuteOperationButton();
 	getClearButton();
 	getRemoveLastButton();
-	getOpenParenthesisButton();
-	getCloseParenthesisButton();
+	getOpenParenthesesButton();
+	getCloseParenthesesButton();
 	getSquareButton();
 	getSquareRootButton();
 }
@@ -61,21 +61,21 @@ function getRemoveLastButton () {
     removeLastButton.addEventListener('click', removeLast);
 }
 
-//Finds the open parenthesis button
-function getOpenParenthesisButton () {
-	let openParenthesisButton = document.getElementById('openParenthesis');
-    openParenthesisButton.addEventListener('click', openParenthesisClicked);
+//Finds the open parentheses button
+function getOpenParenthesesButton () {
+	let openParenthesesButton = document.getElementById('openParentheses');
+    openParenthesesButton.addEventListener('click', openParenthesesClicked);
 }
 
-//Finds the close parenthesis button
-function getCloseParenthesisButton () {
-	let closeParenthesisButton = document.getElementById('closeParenthesis');
-    closeParenthesisButton.addEventListener('click', closeParenthesisClicked);
+//Finds the close parentheses button
+function getCloseParenthesesButton () {
+	let closeParenthesesButton = document.getElementById('closeParentheses');
+    closeParenthesesButton.addEventListener('click', closeParenthesesClicked);
 }
 
 //Finds the decimal button
 function getDecimalButton () {
-	let decimalButton = document.getElementById('closeParenthesis');
+	let decimalButton = document.getElementById('closeParentheses');
    decimalButton.addEventListener('click', decimalClicked);
 }
 
@@ -142,7 +142,7 @@ function insertDisplay (input) {
 		let previousChar = currentlyOnscreen.charAt(onscreenLength - 1);
 		let last2Chars = currentlyOnscreen.charAt(onscreenLength - 2) + previousChar;
 
-		//Only allows close parenthesis where valid
+		//Only allows close parentheses where valid
 		if (input === '(') {
 			if (previousChar != '.') {
 				displayText.textContent = currentlyOnscreen + input;
@@ -153,7 +153,7 @@ function insertDisplay (input) {
 			}
 		}
 		
-		//Only allows close parenthesis where valid
+		//Only allows close parentheses where valid
 		if (input === ')') {
 			if (currentlyOnscreen.includes('(')) {
 				displayText.textContent = currentlyOnscreen + input;
@@ -374,18 +374,18 @@ function clearClicked() {
 	displayText.textContent = '0';
 }
 
-//Adds an open parenthesis
-function openParenthesisClicked (eventData) {
+//Adds an open parentheses
+function openParenthesesClicked (eventData) {
 	let buttonInformation = eventData;
-	let openParenthesisClicked = buttonInformation.target.textContent;
-	insertDisplay(openParenthesisClicked);
+	let openParenthesesClicked = buttonInformation.target.textContent;
+	insertDisplay(openParenthesesClicked);
 }
 
-//Adds a closed parenthesis
-function closeParenthesisClicked (eventData) {
+//Adds a closed parentheses
+function closeParenthesesClicked (eventData) {
 	let buttonInformation = eventData;
-	let closeParenthesisClicked = buttonInformation.target.textContent;
-	insertDisplay(closeParenthesisClicked);
+	let closeParenthesesClicked = buttonInformation.target.textContent;
+	insertDisplay(closeParenthesesClicked);
 }
 
 //Adds a decimal
@@ -418,11 +418,11 @@ function beginExecution() {
 	executionContinued(currentlyOnscreen);
 }
 
-function parenthesis (fromDisplay) {
+function parentheses (fromDisplay) {
 	if (fromDisplay.includes (')')) {
 		
-		let parenthesisCount = (fromDisplay.match(/\)/g) || []).length;
-		let equalToCount = parenthesisCount;
+		let parenthesesCount = (fromDisplay.match(/\)/g) || []).length;
+		let equalToCount = parenthesesCount;
 		console.log(equalToCount);
 		for (i=0; i < equalToCount; i++) {	
 			console.log('started loop');
@@ -434,48 +434,48 @@ function parenthesis (fromDisplay) {
 				} else {
 					let openIndex = fromDisplay.indexOf('(');
 					let closeIndex = fromDisplay.indexOf(')');
-					let insideParenthesis = fromDisplay.slice(openIndex + 1, closeIndex);
+					let insideParentheses = fromDisplay.slice(openIndex + 1, closeIndex);
 					let lastPiece = fromDisplay.slice(closeIndex + 1);
-					console.log('1 set of () ' + insideParenthesis);
-					insideParenthesis = square(insideParenthesis);
-					insideParenthesis = multiply(insideParenthesis);
-					insideParenthesis = divide(insideParenthesis);
-					insideParenthesis = add(insideParenthesis);
-					insideParenthesis = subtract(insideParenthesis);
+					console.log('1 set of () ' + insideParentheses);
+					insideParentheses = square(insideParentheses);
+					insideParentheses = multiply(insideParentheses);
+					insideParentheses = divide(insideParentheses);
+					insideParentheses = add(insideParentheses);
+					insideParentheses = subtract(insideParentheses);
 					if (fromDisplay.charAt(0) === '(') {
-						let parenthesisEvaluated = insideParenthesis + lastPiece;
-						return parenthesisEvaluated;
+						let parenthesesEvaluated = insideParentheses + lastPiece;
+						return parenthesesEvaluated;
 					} else {
 						let firstPiece = fromDisplay.slice(0, openIndex);
 						console.log(firstPiece);
 						if (fromDisplay.charAt(fromDisplay.length - 1) === ')') {
-							let parenthesisEvaluated = firstPiece + insideParenthesis;
-							return parenthesisEvaluated;
+							let parenthesesEvaluated = firstPiece + insideParentheses;
+							return parenthesesEvaluated;
 						} else {
 							console.log(lastPiece);
-							let parenthesisEvaluated = firstPiece + insideParenthesis + lastPiece;
-							return parenthesisEvaluated;
+							let parenthesesEvaluated = firstPiece + insideParentheses + lastPiece;
+							return parenthesesEvaluated;
 						}
 						
 					}
 				}	
 			} else {
-				console.log('more than one set of parenthesis');
+				console.log('more than one set of parentheses');
 				let openIndex = fromDisplay.lastIndexOf('(');
 				let closeIndex = fromDisplay.indexOf(')', openIndex);
-				let insideParenthesis = fromDisplay.slice(openIndex + 1, closeIndex);
+				let insideParentheses = fromDisplay.slice(openIndex + 1, closeIndex);
 				let firstPiece = fromDisplay.slice(0, openIndex);
 				let lastPiece = fromDisplay.slice(closeIndex + 1);
-				/*console.log(insideParenthesis);
-				insideParenthesis = square(insideParenthesis);
-				insideParenthesis = multiply(insideParenthesis);
-				insideParenthesis = divide(insideParenthesis);
-				insideParenthesis = add(insideParenthesis);
-				insideParenthesis = subtract(insideParenthesis);
-				console.log(insideParenthesis); */
-				parenthesisEvaluated = firstPiece + insideParenthesis + lastPiece;
-				console.log(parenthesisEvaluated);
-				fromDisplay = parenthesisEvaluated;
+				/*console.log(insideParentheses);
+				insideParentheses = square(insideParentheses);
+				insideParentheses = multiply(insideParentheses);
+				insideParentheses = divide(insideParentheses);
+				insideParentheses = add(insideParentheses);
+				insideParentheses = subtract(insideParentheses);
+				console.log(insideParentheses); */
+				parenthesesEvaluated = firstPiece + insideParentheses + lastPiece;
+				console.log(parenthesesEvaluated);
+				fromDisplay = parenthesesEvaluated;
 				equalToCount--;
 				console.log(equalToCount);
 				
@@ -497,18 +497,18 @@ function squareRoot (fromDisplay) {
 			let rootIndex = fromDisplay.indexOf('√');
 			let openIndex = fromDisplay.indexOf('(', rootIndex);
 			let closeIndex = fromDisplay.indexOf(')', rootIndex);
-			let insideSquareParenthesis = fromDisplay.slice(openIndex + 1, closeIndex);
-			console.log(insideSquareParenthesis);
+			let insideSquareParentheses = fromDisplay.slice(openIndex + 1, closeIndex);
+			console.log(insideSquareParentheses);
 			
-			if (insideSquareParenthesis.includes('+')
-			 || insideSquareParenthesis.includes('-')
-			 || insideSquareParenthesis.includes('*')
-			 || insideSquareParenthesis.includes( '√')
-			 || insideSquareParenthesis.includes('÷') 
-			 ||insideSquareParenthesis.includes('^') 
+			if (insideSquareParentheses.includes('+')
+			 || insideSquareParentheses.includes('-')
+			 || insideSquareParentheses.includes('*')
+			 || insideSquareParentheses.includes( '√')
+			 || insideSquareParentheses.includes('÷') 
+			 ||insideSquareParentheses.includes('^') 
 			 ) {
 				console.log('inside dif sqrrt');
-				toBeSquareRooted = square(insideSquareParenthesis);
+				toBeSquareRooted = square(insideSquareParentheses);
 				console.log(toBeSquareRooted);
 				toBeSquareRooted = multiply(toBeSquareRooted);
 				console.log(toBeSquareRooted);
@@ -525,7 +525,7 @@ function squareRoot (fromDisplay) {
 
 			} else {
 				console.log('did not contain other operations');
-				squareRooted = Math.sqrt(insideSquareParenthesis);
+				squareRooted = Math.sqrt(insideSquareParentheses);
 				displayText.textContent = squareRooted;
 				fromDisplay = fromDisplay.slice(0,rootIndex) + squareRooted + fromDisplay.slice(closeIndex + 1);
 				return fromDisplay;
@@ -768,10 +768,10 @@ function subtract (fromDisplay) {
 function executionContinued (input) {
 	let fromDisplay = input;
 	let i = 0;
-	let fromParenthesis = [];
+	let fromParentheses = [];
 	
-	fromDisplay = parenthesis(fromDisplay);
-	console.log('after parenthesis ' + fromDisplay);
+	fromDisplay = parentheses(fromDisplay);
+	console.log('after parentheses ' + fromDisplay);
 	
 	fromDisplay = squareRoot(fromDisplay);
 	console.log('after sqrrt ' + fromDisplay);
@@ -795,17 +795,17 @@ function executionContinued (input) {
 		while (fromDisplay.includes('(' && ')')) {
 			let openIndex = fromDisplay.indexOf('(');
 			let closeIndex = fromDisplay.indexOf(')');
-			let insideParenthesis = fromDisplay.slice(openIndex + 1, closeIndex);
-			fromParenthesis[i] = insideParenthesis;
+			let insideParentheses = fromDisplay.slice(openIndex + 1, closeIndex);
+			fromParentheses[i] = insideParentheses;
 			i++;
 			
-			let withoutParenthesis = fromDisplay.slice(closeIndex + 1);
-			let operation = withoutParenthesis.slice(0,1);
-			fromParenthesis[i] = operation;
+			let withoutParentheses = fromDisplay.slice(closeIndex + 1);
+			let operation = withoutParentheses.slice(0,1);
+			fromParentheses[i] = operation;
 			i++;
 			console.log(i);
-			fromDisplay = withoutParenthesis.slice(1);
-			console.log(fromParenthesis);
+			fromDisplay = withoutParentheses.slice(1);
+			console.log(fromParentheses);
 		}
 	} else if (fromDisplay.includes('^2') 
 		&& (!fromDisplay.includes('(' && ')'))) {
@@ -882,26 +882,26 @@ function executionContinued (input) {
 			subtracted = Number(firstNum) - Number(nextNum);
 			displayText.textContent = subtracted;
 		} 
-	for (i = 0; i < fromParenthesis.length; i++ ) {
-		//(!fromParenthesis[i].includes('^2'))
-		console.log(fromParenthesis[i]);
+	for (i = 0; i < fromParentheses.length; i++ ) {
+		//(!fromParentheses[i].includes('^2'))
+		console.log(fromParentheses[i]);
 	}
 	
 	i = 0;
 }
 	
 	
-	/*if (!fromParenthesis.includes('(' && ')')) {
-		while (fromParenthesis[i].includes('*')) {
-			let multiplyIndex = fromParenthesis[i].indexOf('*')
+	/*if (!fromParentheses.includes('(' && ')')) {
+		while (fromParentheses[i].includes('*')) {
+			let multiplyIndex = fromParentheses[i].indexOf('*')
 			console.log(multiplyIndex);
 			return;
 		}
 	} */
-	//while (fromParenthesis includes
+	//while (fromParentheses includes
 }
 
-function findParenthesis () {
+function findParentheses () {
 
 }
 
