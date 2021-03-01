@@ -234,7 +234,6 @@ function insertDisplay (input) {
 		if (input === '-') {
 			if ( 
 				previousChar !== '.'
-				&& previousChar !== '÷'
 				&& previousChar !== '*'
 				&& last2Chars !== '--'
 				){
@@ -420,14 +419,13 @@ function beginExecution() {
 
 function parentheses (fromDisplay) {
 	if (fromDisplay.includes (')')) {
-		
 		let parenthesesCount = (fromDisplay.match(/\)/g) || []).length;
 		let equalToCount = parenthesesCount;
-		console.log(equalToCount);
-		for (i=0; i < equalToCount; i++) {	
+		for (i=0; i <= parenthesesCount; i++) {	
 			console.log('started loop');
 			console.log(i);
-			if (equalToCount < 2) {
+			console.log('from display ' + fromDisplay);
+			if (equalToCount <= 1) {
 				console.log('1 set of ()')
 				if (fromDisplay.includes('√')) {
 					return fromDisplay;
@@ -436,7 +434,6 @@ function parentheses (fromDisplay) {
 					let closeIndex = fromDisplay.indexOf(')');
 					let insideParentheses = fromDisplay.slice(openIndex + 1, closeIndex);
 					let lastPiece = fromDisplay.slice(closeIndex + 1);
-					console.log('1 set of () ' + insideParentheses);
 					insideParentheses = square(insideParentheses);
 					insideParentheses = multiply(insideParentheses);
 					insideParentheses = divide(insideParentheses);
@@ -466,24 +463,23 @@ function parentheses (fromDisplay) {
 				let insideParentheses = fromDisplay.slice(openIndex + 1, closeIndex);
 				let firstPiece = fromDisplay.slice(0, openIndex);
 				let lastPiece = fromDisplay.slice(closeIndex + 1);
-				/*console.log(insideParentheses);
+				console.log(insideParentheses);
+				
 				insideParentheses = square(insideParentheses);
 				insideParentheses = multiply(insideParentheses);
 				insideParentheses = divide(insideParentheses);
 				insideParentheses = add(insideParentheses);
 				insideParentheses = subtract(insideParentheses);
-				console.log(insideParentheses); */
-				parenthesesEvaluated = firstPiece + insideParentheses + lastPiece;
+				console.log(insideParentheses);
+				
+				let parenthesesEvaluated = firstPiece + insideParentheses + lastPiece;
 				console.log(parenthesesEvaluated);
 				fromDisplay = parenthesesEvaluated;
-				equalToCount--;
-				console.log(equalToCount);
 				
-				//!--Problem is here --!
-				return ':o';
+				equalToCount--;
+				console.log('end of multi else loop');
 			}
-			
-		}	
+		} 	
 	} else {
 		console.log('leaving () ');
 		return fromDisplay;
@@ -544,24 +540,27 @@ function square (fromDisplay) {
 		for (i=0; i < squareCount; i++) {
 			if (equalToCount < 2) {
 				console.log('just squaring one');
-				let squareIndex = fromDisplay.indexOf('^');
-				let toBeSquared = fromDisplay.slice(0, squareIndex);
-				let twoIndex = fromDisplay.indexOf('2', squareIndex + 1);
-				console.log(toBeSquared);
-				squared = toBeSquared ** 2;
-				console.log(squared);
-				if (fromDisplay.includes('+' || '-' || '*' || '√' || '÷' )) {
-					let withoutSquared = fromDisplay = fromDisplay.slice(twoIndex + 1);
-					let firstChar = fromDisplay.charAt(0);
-					console.log('nosquared' + withoutSquared);
-					if (!(firstChar >= 0 && firstChar <= 9)) {
-						moveToBack = fromDisplay[0];
-						fromDisplay = fromDisplay.slice(1);
-						fromDisplay = fromDisplay + moveToBack + squared;
-						console.log('fromDis ' + fromDisplay);
-						return fromDisplay.toString();
+				if (fromDisplay.includes('+' || '-' || '*' || '÷' )) {
+					console.log('complex squaring')
+					let squareIndex = fromDisplay.indexOf('^');
+					while (readyToSquare === false) {
+						if (a) {
+
+						} 
 					}
+					
+					let toBeSquared = fromDisplay.slice(0, squareIndex);
+					let twoIndex = fromDisplay.indexOf('2', squareIndex + 1);
+					let withoutSquared = fromDisplay.slice(twoIndex + 1);
+					console.log(toBeSquared);
+					
 				} else {
+					//Squaring only one number
+					console.log('simple squaring');
+					let squareIndex = fromDisplay.indexOf('^');
+					let toBeSquared = fromDisplay.slice(0, squareIndex);
+					let twoIndex = fromDisplay.indexOf('2', squareIndex + 1);
+					squared = toBeSquared ** 2;
 					fromDisplay = squared;
 					displayText.textContent = squared;
 					console.log(fromDisplay);
@@ -654,26 +653,23 @@ function divide (fromDisplay) {
 			if (equalToCount < 2) {
 				console.log('just dividing one');
 				let divideIndex = fromDisplay.indexOf('÷');
-				let num1 = fromDisplay.slice(0, divideIndex);
-				let num2 = fromDisplay.slice(divideIndex + 1);
-				divided = num1 / num2;
-				console.log(divided);
 				if (fromDisplay.includes('+' || '-' || '^' || '√' || '*' )) {
-					let withoutSquared = fromDisplay = fromDisplay.slice(twoIndex + 1);
-					let firstChar = fromDisplay.charAt(0);
-					if (!(firstChar >= 0 && firstChar <= 9)) {
-						moveToBack = fromDisplay[0];
-						fromDisplay = fromDisplay.slice(1);
-						fromDisplay = fromDisplay + moveToBack + squared;
-						console.log('fromDis ' + fromDisplay);
-						return fromDisplay.toString();
-					}
+					
 				} else {
+					let num1 = fromDisplay.slice(0, divideIndex);
+					let num2 = fromDisplay.slice(divideIndex + 1);
+					if (num2 === '0' || num2 === 0) {
+						fromDisplay = 'ERROR CANNOT ÷ BY 0';
+						return fromDisplay;
+					} else {
+						divided = num1 / num2;
+					}
 					fromDisplay = divided;
 					displayText.textContent = divided;
 					console.log(fromDisplay);
 					return fromDisplay.toString();
 				}
+				console.log(divided);
 				
 			} else {	
 				console.log('dividing more than two numbers');
@@ -706,24 +702,126 @@ function add (fromDisplay) {
 			if (equalToCount < 2) {
 				console.log('adding two numbers');
 				let additionIndex = fromDisplay.indexOf('+');
-				let num1 = fromDisplay.slice(0, additionIndex);
-				let num2 = fromDisplay.slice(additionIndex + 1)
-				let added = Number(num1) + Number(num2);
-				console.log(fromDisplay);
-				fromDisplay = added;
-				displayText.textContent = added;
+				//If the character to the left of the preaddition index is a number, shift the preaddition index left one and add that number to num1
+				if (fromDisplay.includes('-')) {
+					let subtractionCount = (fromDisplay.match(/\-/g) || []).length;
+					if (subtractionCount < 2) {
+						console.log('1 -');
+						let subtractionIndex = fromDisplay.indexOf('-');
+						if (additionIndex < subtractionIndex) {
+							let num1 = fromDisplay.slice(0, additionIndex);
+							let num2 = fromDisplay.slice(additionIndex + 1, subtractionIndex);
+							let lastPiece = fromDisplay.slice(subtractionIndex);
+							let added = Number(num1) + Number(num2);
+							fromDisplay = added + lastPiece;
+							console.log(fromDisplay);
+						} else {
+							if (fromDisplay.charAt(0) === '-') {
+								let num1 = fromDisplay.slice(0, additionIndex);
+								let num2 = fromDisplay.slice(additionIndex + 1);
+								let added = Number(num1) + Number(num2);
+								fromDisplay = added;
+								displayText.textContent = added;
+								console.log(fromDisplay);
+							}
+							
+						}
+					} else {
+						console.log('multiple -\'s');
+						let firstSubtractionIndex = fromDisplay.indexOf('-');
+						console.log(firstSubtractionIndex);
+						let nextSubtractionIndex = fromDisplay.indexOf('-', firstSubtractionIndex + 1);
+						console.log(firstSubtractionIndex, nextSubtractionIndex);
+						if (additionIndex < firstSubtractionIndex) {
+							let num1 = fromDisplay.slice(0, additionIndex);
+							let num2 = fromDisplay.slice(additionIndex + 1, firstSubtractionIndex);
+							let lastPiece = fromDisplay.slice(firstSubtractionIndex);
+							let added = Number(num1) + Number(num2);
+							fromDisplay = added + lastPiece;
+						} else {
+							let num1 = fromDisplay.slice(firstSubtractionIndex + 1, additionIndex);
+							let num2 = fromDisplay.slice(additionIndex + 1, nextSubtractionIndex);
+							let firstPiece = fromDisplay.slice(0,firstSubtractionIndex + 1);
+							let lastPiece = fromDisplay.slice(nextSubtractionIndex);
+							let added = Number(num1) + Number(num2);
+							fromDisplay = firstPiece + added + lastPiece;
+						}	
+					}
+					
+				} else {
+					let num1 = fromDisplay.slice(0, additionIndex);
+					let num2 = fromDisplay.slice(additionIndex + 1)
+					let added = Number(num1) + Number(num2);
+					console.log(fromDisplay);
+					fromDisplay = added;
+					displayText.textContent = added;
+				}
 			} else {
 				console.log('adding more than two numbers');
 				additionIndex = fromDisplay.indexOf('+');
 				nextAdditionIndex = fromDisplay.indexOf('+', additionIndex + 1);
-				let num1 = fromDisplay.slice(0, additionIndex);
-				let num2 = fromDisplay.slice(additionIndex + 1, nextAdditionIndex)
-				let added = Number(num1) + Number(num2);
-				console.log('added ' + added);
-				fromDisplay = added + fromDisplay.slice(nextAdditionIndex);
-				console.log('fromDis ' + fromDisplay);
-				equalToCount--;
-			} 
+				//Checks for subtracion symbols
+				if (fromDisplay.includes('-')) {
+					let subtractionCount = (fromDisplay.match(/\-/g) || []).length;
+					//Checks number of subtraction symbols
+					if (subtractionCount < 2) {
+						console.log('1 -');
+						let subtractionIndex = fromDisplay.indexOf('-');
+						if (additionIndex < subtractionIndex) {
+							let num1 = fromDisplay.slice(0, additionIndex);
+							let num2 = fromDisplay.slice(additionIndex + 1, subtractionIndex);
+							let lastPiece = fromDisplay.slice(subtractionIndex);
+							let added = Number(num1) + Number(num2);
+							fromDisplay = added + lastPiece;
+							console.log(fromDisplay);
+						} else {
+							let num1 = fromDisplay.slice(subtractionIndex + 1, additionIndex);
+							let num2 = fromDisplay.slice(additionIndex + 1);
+							let firstPiece = fromDisplay.slice(0,subtractionIndex + 1);
+							let added = Number(num1) + Number(num2);
+							fromDisplay = firstPiece + added;
+							console.log(fromDisplay);
+						}
+					} else {
+						console.log('multiple -\'s');
+						let firstSubtractionIndex = fromDisplay.indexOf('-', 1);
+						console.log(firstSubtractionIndex);
+						let nextSubtractionIndex = fromDisplay.indexOf('-', firstSubtractionIndex + 1);
+						console.log(firstSubtractionIndex, nextSubtractionIndex);
+						if (additionIndex < firstSubtractionIndex) {
+							let num1 = fromDisplay.slice(0, additionIndex);
+							let num2 = fromDisplay.slice(additionIndex + 1, firstSubtractionIndex);
+							let lastPiece = fromDisplay.slice(firstSubtractionIndex);
+							let added = Number(num1) + Number(num2);
+							fromDisplay = added + lastPiece;
+						} else if (additionIndex > firstSubtractionIndex && additionIndex < nextSubtractionIndex) {
+							let num1 = fromDisplay.slice(firstSubtractionIndex + 1, additionIndex);
+							let num2 = fromDisplay.slice(additionIndex + 1, nextSubtractionIndex);
+							let firstPiece = fromDisplay.slice(0,firstSubtractionIndex + 1);
+							let lastPiece = fromDisplay.slice(nextSubtractionIndex);
+							let added = Number(num1) + Number(num2);
+							fromDisplay = firstPiece + added + lastPiece;
+							console.log(fromDisplay);
+							firstSubtractionIndex = fromDisplay.indexOf('-', firstSubtractionIndex + 1);
+						} else {
+							let num1 = fromDisplay.slice(nextSubtractionIndex + 1, additionIndex);
+							let num2 = fromDisplay.slice(additionIndex + 1);
+							let firstPiece = fromDisplay.slice(0,nextSubtractionIndex + 1);
+							let added = Number(num1) + Number(num2);
+							fromDisplay = firstPiece + added;
+							console.log(fromDisplay);	
+						}
+					}	
+				} else {
+					let num1 = fromDisplay.slice(0, additionIndex);
+					let num2 = fromDisplay.slice(additionIndex + 1, nextAdditionIndex)
+					let added = Number(num1) + Number(num2);
+					console.log('added ' + added);
+					fromDisplay = added + fromDisplay.slice(nextAdditionIndex);
+					console.log('fromDis ' + fromDisplay);
+					equalToCount--;
+				}
+			}
 		}
 		return fromDisplay.toString(); 
 	} else {
@@ -736,22 +834,72 @@ function subtract (fromDisplay) {
 		console.log('has minus sign');
 		let subtractionCount = (fromDisplay.match(/\-/g) || []).length;
 		let equalToCount = subtractionCount;
+		
+		//Swaps a double negative for an addition symbol and runs the addition function
+		if (fromDisplay.includes('--')) {
+			fromDisplay = fromDisplay.replace('--', '+');	
+			fromDisplay = add(fromDisplay);
+			console.log(fromDisplay);
+			subtractionCount = subtractionCount - 2;
+			equalToCount = equalToCount - 2;
+			if (fromDisplay.includes('--')) {
+				fromDisplay = fromDisplay.replace('--', '+');	
+				fromDisplay = add(fromDisplay);
+				console.log(fromDisplay);
+				subtractionCount = subtractionCount - 2;
+				equalToCount = equalToCount - 2;
+			} else if (fromDisplay.includes ('-')) {
+				fromDisplay = fromDisplay;
+			} else {
+				return fromDisplay;
+			}
+		}
+		
+		//Starts the function
 		for (i=0; i < subtractionCount; i++) {
+			console.log(fromDisplay);
+			if (fromDisplay.charAt(0) === '-') {
+				equalToCount = equalToCount - 1;
+				subtractionCount = subtractionCount - 1;
+				console.log(subtractionCount);
+			}
 			if (equalToCount < 2) {
 				console.log('subtracting two numbers');
-				let subtractionIndex = fromDisplay.indexOf('-');
-				let num1 = fromDisplay.slice(0, subtractionIndex);
-				let num2 = fromDisplay.slice(subtractionIndex + 1)
-				let subtracted = Number(num1) - Number(num2);
-				console.log(fromDisplay);
-				fromDisplay = subtracted;
-				displayText.textContent = subtracted;
+				if (fromDisplay.charAt(0) === '-') {
+					console.log('firstchar -');
+					if (subtractionCount < 1) {
+						return fromDisplay;
+					} else {
+						let subtractionIndex = fromDisplay.indexOf('-', 1);
+						let num1 = fromDisplay.slice(0, subtractionIndex);
+						let num2 = fromDisplay.slice(subtractionIndex + 1)
+						console.log(num1, num2);
+						let subtracted = Number(num1) - Number(num2);
+						console.log(subtracted);
+						console.log(fromDisplay);
+						fromDisplay = subtracted;
+						console.log(fromDisplay);
+						displayText.textContent = subtracted;
+					}
+				} else {
+					let subtractionIndex = fromDisplay.indexOf('-', 1);
+					let num1 = fromDisplay.slice(0, subtractionIndex);
+					let num2 = fromDisplay.slice(subtractionIndex + 1)
+					let subtracted = Number(num1) - Number(num2);
+					console.log(fromDisplay);
+					fromDisplay = subtracted;
+					console.log(fromDisplay);
+					displayText.textContent = subtracted;
+				}
+				
 			} else {
 				console.log('subtracting more than two numbers');
-				subtractionIndex = fromDisplay.indexOf('-');
+				subtractionIndex = fromDisplay.indexOf('-', 1);
 				nextSubtractionIndex = fromDisplay.indexOf('-', subtractionIndex + 1);
 				let num1 = fromDisplay.slice(0, subtractionIndex);
-				let num2 = fromDisplay.slice(subtractionIndex + 1, nextSubtractionIndex)
+				console.log('num1 ' + num1);
+				let num2 = fromDisplay.slice(subtractionIndex + 1, nextSubtractionIndex);
+				console.log('num2 ' + num2);
 				let subtracted = Number(num1) - Number(num2);
 				console.log('subtracted ' + subtracted);
 				fromDisplay = subtracted + fromDisplay.slice(nextSubtractionIndex);
@@ -767,8 +915,6 @@ function subtract (fromDisplay) {
 
 function executionContinued (input) {
 	let fromDisplay = input;
-	let i = 0;
-	let fromParentheses = [];
 	
 	fromDisplay = parentheses(fromDisplay);
 	console.log('after parentheses ' + fromDisplay);
@@ -791,7 +937,10 @@ function executionContinued (input) {
 	fromDisplay = subtract(fromDisplay);
 	console.log('after subtract ' + fromDisplay);
 
-	if (fromDisplay.includes('(' && ')')) {
+	displayText.textContent = fromDisplay;
+}
+
+	/*if (fromDisplay.includes('(' && ')')) {
 		while (fromDisplay.includes('(' && ')')) {
 			let openIndex = fromDisplay.indexOf('(');
 			let closeIndex = fromDisplay.indexOf(')');
@@ -897,13 +1046,8 @@ function executionContinued (input) {
 			console.log(multiplyIndex);
 			return;
 		}
-	} */
-	//while (fromParentheses includes
-}
-
-function findParentheses () {
-
-}
+	}
+	//while (fromParentheses includes*/
 
 //Needs to add
 /*function add () {
