@@ -73,15 +73,11 @@
 }
 
 #executeOperation {
-    background-color:cornflowerblue;
+font-size: 30px;
 }
 
 #executeOperation.digit:hover {
     background-color:rgb(87, 130, 209);
-}
-
-#removeLast {
-    background-color: rgba(156, 87, 87, 0.377);
 }
 
 #removeLast:hover {
@@ -99,4 +95,25 @@
 .number {
     color: rgb(255, 208, 170);
 
+}
+
+#ans {
+    font-size: 12px;
+}
+
+.ans {
+    height: 100px;
+    width: 100px;
+    background-color: transparent;
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 125px;  
+}
+
+.ans:hover {
+    background-color: rgba(15, 15, 15, 50%);
+    transition: ease-in .1s;
 }
