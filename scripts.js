@@ -978,6 +978,10 @@ function divide (fromDisplay) {
 									console.log('nothing after');
 									num2 = fromDisplay.slice(divideIndex + 1);
 									lastPiece = '';
+									if (num2 === '0' || num2 === 0) {
+										fromDisplay = 'ERROR CANNOT ÷ BY 0 x_x'
+										return fromDisplay;
+									}
 									divided = num1 / num2;
 									fromDisplay = firstPiece + divided + lastPiece;
 									console.log(fromDisplay);
@@ -988,6 +992,10 @@ function divide (fromDisplay) {
 								} else {
 									console.log('something after');
 									num2 = fromDisplay.slice(divideIndex + 1, postDivideIndex);
+									if (num2 === '0' || num2 === 0) {
+										fromDisplay = 'ERROR CANNOT ÷ BY 0 x_x'
+										return fromDisplay;
+									}
 									lastPiece = fromDisplay.slice(postDivideIndex);
 									divided = num1 / num2;
 									fromDisplay = firstPiece + divided + lastPiece;
@@ -1006,6 +1014,10 @@ function divide (fromDisplay) {
 					let divideIndex = fromDisplay.indexOf('÷');
 					let num1 = fromDisplay.slice(0, divideIndex);
 					let num2 = fromDisplay.slice(divideIndex + 1);
+					if (num2 === '0' || num2 === 0) {
+						fromDisplay = 'ERROR CANNOT ÷ BY 0 x_x'
+						return fromDisplay;
+					}
 					divided = num1 / num2;
 					fromDisplay = divided;
 					displayText.textContent = divided;
@@ -1066,6 +1078,10 @@ function divide (fromDisplay) {
 									console.log('nothing after');
 									num2 = fromDisplay.slice(divideIndex + 1);
 									lastPiece = '';
+									if (num2 === '0' || num2 === 0) {
+										fromDisplay = 'ERROR CANNOT ÷ BY 0 x_x'
+										return fromDisplay;
+									}
 									divided = num1 / num2;
 									fromDisplay = firstPiece + divided + lastPiece;
 									console.log(fromDisplay);
@@ -1076,6 +1092,10 @@ function divide (fromDisplay) {
 								} else {
 									console.log('something after');
 									num2 = fromDisplay.slice(divideIndex + 1, postDivideIndex);
+									if (num2 === '0' || num2 === 0) {
+										fromDisplay = 'ERROR CANNOT ÷ BY 0 x_x'
+										return fromDisplay;
+									}
 									lastPiece = fromDisplay.slice(postDivideIndex);
 									divided = num1 / num2;
 									fromDisplay = firstPiece + divided + lastPiece;
@@ -1331,6 +1351,8 @@ function subtract (fromDisplay) {
 function executionContinued (input) {
 	let fromDisplay = input;
 	if (typeof(ans) === 'object') {
+		ans = '0';
+	} else if (ans.includes('x_x')) {
 		ans = '0';
 	}
 
