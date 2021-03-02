@@ -409,7 +409,7 @@ function squareRootClicked (eventData) {
 }
 
 
-//Actual calculating-----------------------------------------
+//Calcuation Functions-----------------------------------------
 
 //executes the operation
 function beginExecution() {
@@ -503,7 +503,6 @@ function squareRoot (fromDisplay) {
 			 || insideSquareParentheses.includes('÷') 
 			 ||insideSquareParentheses.includes('^') 
 			 ) {
-				console.log('inside dif sqrrt');
 				toBeSquareRooted = square(insideSquareParentheses);
 				console.log(toBeSquareRooted);
 				toBeSquareRooted = multiply(toBeSquareRooted);
@@ -1268,62 +1267,3 @@ function executionContinued (input) {
 	}
 	//while (fromParentheses includes*/
 
-//Needs to add
-/*function add () {
-	let value = 0;
-	for (i = (arguments.length - 1); i >=0; i--) {
-		value = value + arguments[i];
-	}
-	
-	return value;
-}
-
-//Needs to subtract
-function subtract () {
-	let value = arguments[0];
-	for (i = 1; (i < arguments.length); i++) {
-		value = value - arguments[i];
-	}
-
-	return value;
-}*/
-
-//Needs to multiply
-/*function multiply (array) {
-	let arrayLength = array.length;
-	let value = 1;
-	for (i = 0; (i < arrayLength); i++) {
-		value = value * array[i];
-	}
-	
-	return value;
-}*/
-
-/*//Squares a number
-function square() {
-	let value = arguments[0];
-	value = value ** 2;
-	
-	return value;
-}*/
-
-//Raises a number to a power
-function power() {
-	let argumentsLength = arguments.length;
-	let value = arguments[0];
-	for (i = 1; (i < argumentsLength); i++) {
-		value = value ** arguments[i];
-	}
-	
-	return value;
-}
-
-function sum (array) {
-	let arrayLength = array.length;
-	let value = 0;
-	for (i = 0; (i < arrayLength); i++) {
-		value = value + array[i];
-	}
-	
-	return value;
-}
