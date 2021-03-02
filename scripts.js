@@ -540,26 +540,77 @@ function square (fromDisplay) {
 		for (i=0; i < squareCount; i++) {
 			if (equalToCount < 2) {
 				console.log('just squaring one');
-				if (fromDisplay.includes('+' || '-' || '*' || '÷' )) {
+				if (fromDisplay.includes('+') 
+				|| fromDisplay.includes('-')
+				|| fromDisplay.includes('*')
+				|| fromDisplay.includes('÷') ) {
 					console.log('complex squaring')
 					let squareIndex = fromDisplay.indexOf('^');
-					while (readyToSquare === false) {
-						if (a) {
-
+					let preSquareIndex = squareIndex - 1;
+					let twoIndex = fromDisplay.indexOf('2', squareIndex + 1);
+					let postSquareIndex = twoIndex + 1;
+					let preReadyToSquare = false;
+					let postReadyToSquare = false;
+					let toBeSquared;
+					let firstPiece;
+					let lastPiece;
+					while (preReadyToSquare === false && postReadyToSquare === false) {
+						let preCharCheck = fromDisplay.charAt(preSquareIndex); 
+						console.log(preCharCheck);
+						if (preCharCheck === '*'
+						|| preCharCheck === '÷'
+						|| preCharCheck === '+'
+						|| preCharCheck === '-'
+						|| preCharCheck === ''
+						) {
+							if (preCharCheck === '') {
+								toBeSquared = fromDisplay.slice(0, squareIndex);
+								firstPiece = '';
+								console.log(toBeSquared);
+								preReadyToSquare = true;
+							} else {
+								toBeSquared = fromDisplay.slice(preSquareIndex + 1, squareIndex);
+								firstPiece = fromDisplay.slice (0, preSquareIndex + 1);
+								console.log(toBeSquared);
+								preReadyToSquare = true;
+							}	
+						} else {
+							preSquareIndex--;
+						}
+						
+						console.log(preReadyToSquare);
+						console.log(toBeSquared);
+						if (preReadyToSquare === true) {
+							let postCharCheck = fromDisplay.charAt(postSquareIndex);
+							console.log(postCharCheck);
+							if (postCharCheck === '*'
+							|| postCharCheck === '÷'
+							|| postCharCheck === '+'
+							|| postCharCheck === '-'
+							) {
+								console.log('something after');
+								lastPiece = fromDisplay.slice(postSquareIndex);
+								let squared = toBeSquared ** 2;
+								console.log(squared);
+								fromDisplay = firstPiece + squared + lastPiece;
+								console.log(fromDisplay);
+								postReadyToSquare = true;
+							} else {
+								console.log('nothing after');
+								let squared = toBeSquared ** 2;
+								lastPiece = '';
+								fromDisplay = firstPiece + squared + lastPiece;
+								console.log(fromDisplay);
+								postReadyToSquare = true;
+							}
 						} 
 					}
-					
-					let toBeSquared = fromDisplay.slice(0, squareIndex);
-					let twoIndex = fromDisplay.indexOf('2', squareIndex + 1);
-					let withoutSquared = fromDisplay.slice(twoIndex + 1);
-					console.log(toBeSquared);
-					
+					return fromDisplay.toString();	
 				} else {
 					//Squaring only one number
 					console.log('simple squaring');
 					let squareIndex = fromDisplay.indexOf('^');
 					let toBeSquared = fromDisplay.slice(0, squareIndex);
-					let twoIndex = fromDisplay.indexOf('2', squareIndex + 1);
 					squared = toBeSquared ** 2;
 					fromDisplay = squared;
 					displayText.textContent = squared;
@@ -569,20 +620,71 @@ function square (fromDisplay) {
 				
 			} else {	
 				console.log('squaring more than two numbers');
-				squareIndex = fromDisplay.indexOf('^');
-				twoIndex = fromDisplay.indexOf('2', squareIndex + 1);
-				toBeSquared = fromDisplay.slice(0, squareIndex);
-				squared = toBeSquared ** 2;
-				fromDisplay = fromDisplay.slice(twoIndex + 1);
-				firstChar = fromDisplay.charAt(0);
-				if (firstChar >= 0 && firstChar <= 9) {
-					fromDisplay = fromDisplay.slice(twoIndex + 1) + squared;
-					console.log('fromDis ' + fromDisplay);
-				} else {
-					moveToBack = fromDisplay[0];
-					fromDisplay = fromDisplay.slice(1);
-					fromDisplay = fromDisplay + moveToBack + squared;
-					console.log('fromDis ' + fromDisplay);
+				if (fromDisplay.includes('+') 
+				|| fromDisplay.includes('-')
+				|| fromDisplay.includes('*')
+				|| fromDisplay.includes('÷') ) {
+					console.log('complex squaring')
+					let squareIndex = fromDisplay.indexOf('^');
+					let preSquareIndex = squareIndex - 1;
+					let twoIndex = fromDisplay.indexOf('2', squareIndex + 1);
+					let postSquareIndex = twoIndex + 1;
+					let preReadyToSquare = false;
+					let postReadyToSquare = false;
+					let toBeSquared;
+					let firstPiece;
+					let lastPiece;
+					while (preReadyToSquare === false && postReadyToSquare === false) {
+						let preCharCheck = fromDisplay.charAt(preSquareIndex); 
+						console.log(preCharCheck);
+						if (preCharCheck === '*'
+						|| preCharCheck === '÷'
+						|| preCharCheck === '+'
+						|| preCharCheck === '-'
+						|| preCharCheck === ''
+						) {
+							if (preCharCheck === '') {
+								toBeSquared = fromDisplay.slice(0, squareIndex);
+								firstPiece = '';
+								console.log(toBeSquared);
+								preReadyToSquare = true;
+							} else {
+								toBeSquared = fromDisplay.slice(preSquareIndex + 1, squareIndex);
+								firstPiece = fromDisplay.slice (0, preSquareIndex + 1);
+								console.log(toBeSquared);
+								preReadyToSquare = true;
+							}	
+						} else {
+							preSquareIndex--;
+						}
+						
+						console.log(preReadyToSquare);
+						console.log(toBeSquared);
+						if (preReadyToSquare === true) {
+							let postCharCheck = fromDisplay.charAt(postSquareIndex);
+							console.log(postCharCheck);
+							if (postCharCheck === '*'
+							|| postCharCheck === '÷'
+							|| postCharCheck === '+'
+							|| postCharCheck === '-'
+							) {
+								console.log('something after');
+								lastPiece = fromDisplay.slice(postSquareIndex);
+								let squared = toBeSquared ** 2;
+								console.log(squared);
+								fromDisplay = firstPiece + squared + lastPiece;
+								console.log(fromDisplay);
+								postReadyToSquare = true;
+							} else {
+								console.log('nothing after');
+								let squared = toBeSquared ** 2;
+								lastPiece = '';
+								fromDisplay = firstPiece + squared + lastPiece;
+								console.log(fromDisplay);
+								postReadyToSquare = true;
+							}
+						} 
+					}	
 				}
 				equalToCount--;
 			}
@@ -599,23 +701,82 @@ function multiply (fromDisplay) {
 		let equalToCount = multiplyCount;
 		for (i=0; i < multiplyCount; i++) {
 			if (equalToCount < 2) {
-				console.log('just multiplying one');
-				let multiplyIndex = fromDisplay.indexOf('*');
-				let num1 = fromDisplay.slice(0, multiplyIndex);
-				let num2 = fromDisplay.slice(multiplyIndex + 1);
-				multiplied = num1 * num2;
-				console.log(multiplied);
-				if (fromDisplay.includes('+' || '-' || '^' || '√' || '÷' )) {
-					let withoutSquared = fromDisplay = fromDisplay.slice(twoIndex + 1);
-					let firstChar = fromDisplay.charAt(0);
-					if (!(firstChar >= 0 && firstChar <= 9)) {
-						moveToBack = fromDisplay[0];
-						fromDisplay = fromDisplay.slice(1);
-						fromDisplay = fromDisplay + moveToBack + squared;
-						console.log('fromDis ' + fromDisplay);
-						return fromDisplay.toString();
+				console.log('multiplying once');
+				if (fromDisplay.includes('+') 
+				|| fromDisplay.includes('-')
+				|| fromDisplay.includes('÷') ) {
+					console.log('complex multiplying')
+					let multiplyIndex = fromDisplay.indexOf('*');
+					let preMultiplyIndex = multiplyIndex - 1;
+					let postMultiplyIndex = multiplyIndex + 1;
+					let preReadyToMultiply = false;
+					let postReadyToMultiply = false;
+					let num1;
+					let num2;
+					let firstPiece;
+					let lastPiece;
+					while (preReadyToMultiply === false || postReadyToMultiply === false) {
+						let preCharCheck = fromDisplay.charAt(preMultiplyIndex); 
+						if (preCharCheck === '÷'
+						|| preCharCheck === '+'
+						|| preCharCheck === '-'
+						|| preCharCheck === ''
+						) {
+							console.log('symbol');
+							if (preCharCheck === '') {
+								console.log('empty before');
+								num1 = fromDisplay.slice(0, multiplyIndex);
+								firstPiece = '';
+								preReadyToMultiply = true;
+							} else {
+								console.log('stuff before');
+								num1 = fromDisplay.slice(preMultiplyIndex + 1, multiplyIndex);
+								firstPiece = fromDisplay.slice (0, preMultiplyIndex + 1);
+								preReadyToMultiply = true;
+							}	
+						} else {
+							preMultiplyIndex--;
+						}
+						
+						if (preReadyToMultiply === true) {
+							let postCharCheck = fromDisplay.charAt(postMultiplyIndex);
+							if (postCharCheck === '*'
+							|| postCharCheck === '÷'
+							|| postCharCheck === '+'
+							|| postCharCheck === '-'
+							|| postCharCheck === ''
+							) {
+								console.log('has symbol');
+								if (postCharCheck === '') {
+									console.log('nothing after');
+									num2 = fromDisplay.slice(multiplyIndex + 1);
+									lastPiece = '';
+									multiplied = num1 * num2;
+									fromDisplay = firstPiece + multiplied + lastPiece;
+									console.log(fromDisplay);
+									postReadyToMultiply = true;
+								} else {
+									console.log('something after');
+									num2 = fromDisplay.slice(multiplyIndex + 1, postMultiplyIndex);
+									lastPiece = fromDisplay.slice(postMultiplyIndex);
+									multiplied = num1 * num2;
+									fromDisplay = firstPiece + multiplied + lastPiece;
+									console.log(fromDisplay);
+									postReadyToMultiply = true;
+								}
+							} else {
+								postMultiplyIndex++;
+							}
+						} 
 					}
+					return fromDisplay.toString();	
 				} else {
+					//Multiplying only one number
+					console.log('simple multiplying');
+					let multiplyIndex = fromDisplay.indexOf('*');
+					let num1 = fromDisplay.slice(0, multiplyIndex);
+					let num2 = fromDisplay.slice(multiplyIndex + 1);
+					multiplied = num1 * num2;
 					fromDisplay = multiplied;
 					displayText.textContent = multiplied;
 					console.log(fromDisplay);
@@ -624,17 +785,75 @@ function multiply (fromDisplay) {
 				
 			} else {	
 				console.log('multiplying more than two numbers');
-				multiplyIndex = fromDisplay.indexOf('*');
-				nextIndex = fromDisplay.indexOf('*', multiplyIndex + 1);
-				num1 = fromDisplay.slice(0, multiplyIndex);
-				num2 = fromDisplay.slice(multiplyIndex + 1, nextIndex);
-				console.log(num1 + '' + num2);
-				multiplied = num1 * num2;
-				console.log(multiplied);
-				fromDisplay = multiplied + '*' + fromDisplay.slice(nextIndex + 1);
-				console.log('from display: ' + fromDisplay);
-				
-			equalToCount--;
+				if (fromDisplay.includes('+') 
+				|| fromDisplay.includes('-')
+				|| fromDisplay.includes('÷') ) {
+					console.log('complex multiplying')
+					let multiplyIndex = fromDisplay.indexOf('*');
+					let preMultiplyIndex = multiplyIndex - 1;
+					let postMultiplyIndex = multiplyIndex + 1;
+					let preReadyToMultiply = false;
+					let postReadyToMultiply = false;
+					let num1;
+					let num2;
+					let firstPiece;
+					let lastPiece;
+					while (preReadyToMultiply === false || postReadyToMultiply === false) {
+						let preCharCheck = fromDisplay.charAt(preMultiplyIndex); 
+						if (preCharCheck === '÷'
+						|| preCharCheck === '+'
+						|| preCharCheck === '-'
+						|| preCharCheck === ''
+						) {
+							console.log('symbol');
+							if (preCharCheck === '') {
+								console.log('empty before');
+								num1 = fromDisplay.slice(0, multiplyIndex);
+								firstPiece = '';
+								preReadyToMultiply = true;
+							} else {
+								console.log('stuff before');
+								num1 = fromDisplay.slice(preMultiplyIndex + 1, multiplyIndex);
+								firstPiece = fromDisplay.slice (0, preMultiplyIndex + 1);
+								preReadyToMultiply = true;
+							}	
+						} else {
+							preMultiplyIndex--;
+						}
+						
+						if (preReadyToMultiply === true) {
+							let postCharCheck = fromDisplay.charAt(postMultiplyIndex);
+							if (postCharCheck === '*'
+							|| postCharCheck === '÷'
+							|| postCharCheck === '+'
+							|| postCharCheck === '-'
+							|| postCharCheck === ''
+							) {
+								console.log('has symbol');
+								if (postCharCheck === '') {
+									console.log('nothing after');
+									num2 = fromDisplay.slice(multiplyIndex + 1);
+									lastPiece = '';
+									multiplied = num1 * num2;
+									fromDisplay = firstPiece + multiplied + lastPiece;
+									console.log(fromDisplay);
+									postReadyToMultiply = true;
+								} else {
+									console.log('something after');
+									num2 = fromDisplay.slice(multiplyIndex + 1, postMultiplyIndex);
+									lastPiece = fromDisplay.slice(postMultiplyIndex);
+									multiplied = num1 * num2;
+									fromDisplay = firstPiece + multiplied + lastPiece;
+									console.log(fromDisplay);
+									postReadyToMultiply = true;
+								}
+							} else {
+								postMultiplyIndex++;
+							}
+						} 
+					}	
+				}
+				equalToCount--;
 			}
 		} 
 
