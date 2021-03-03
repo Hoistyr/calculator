@@ -1170,6 +1170,7 @@ function add (fromDisplay) {
 						let firstSubtractionIndex = fromDisplay.indexOf('-');
 						console.log(firstSubtractionIndex);
 						let nextSubtractionIndex = fromDisplay.indexOf('-', firstSubtractionIndex + 1);
+						let lastSubtractionIndex = fromDisplay.lastIndexOf('-');
 						console.log(firstSubtractionIndex, nextSubtractionIndex);
 						if (additionIndex < firstSubtractionIndex) {
 							let num1 = fromDisplay.slice(0, additionIndex);
@@ -1177,7 +1178,16 @@ function add (fromDisplay) {
 							let lastPiece = fromDisplay.slice(firstSubtractionIndex);
 							let added = Number(num1) + Number(num2);
 							fromDisplay = added + lastPiece;
-						} else {
+						} else if (additionIndex > lastSubtractionIndex) {
+							console.log('all addition last (1 +)');
+							let num1 = fromDisplay.slice(lastSubtractionIndex + 1, additionIndex);
+							let num2 = fromDisplay.slice(additionIndex + 1);
+							let firstPiece = fromDisplay.slice(0,lastSubtractionIndex + 1);
+							let lastPiece = '';
+							let added = Number(num1) + Number(num2);
+							fromDisplay = firstPiece + added + lastPiece;
+						}
+						else {
 							let num1 = fromDisplay.slice(firstSubtractionIndex + 1, additionIndex);
 							let num2 = fromDisplay.slice(additionIndex + 1, nextSubtractionIndex);
 							let firstPiece = fromDisplay.slice(0,firstSubtractionIndex + 1);
@@ -1223,16 +1233,30 @@ function add (fromDisplay) {
 						}
 					} else {
 						console.log('multiple -\'s');
+						console.log(fromDisplay);
 						let firstSubtractionIndex = fromDisplay.indexOf('-', 1);
 						console.log(firstSubtractionIndex);
 						let nextSubtractionIndex = fromDisplay.indexOf('-', firstSubtractionIndex + 1);
+						let lastSubtractionIndex = fromDisplay.lastIndexOf('-');
 						console.log(firstSubtractionIndex, nextSubtractionIndex);
 						if (additionIndex < firstSubtractionIndex) {
-							let num1 = fromDisplay.slice(0, additionIndex);
-							let num2 = fromDisplay.slice(additionIndex + 1, firstSubtractionIndex);
-							let lastPiece = fromDisplay.slice(firstSubtractionIndex);
-							let added = Number(num1) + Number(num2);
-							fromDisplay = added + lastPiece;
+							if (nextAdditionIndex < firstSubtractionIndex) {
+								let num1 = fromDisplay.slice(0, additionIndex);
+								let num2 = fromDisplay.slice(additionIndex + 1, nextAdditionIndex);
+								let lastPiece = fromDisplay.slice(nextAdditionIndex);
+								let added = Number(num1) + Number(num2);
+								fromDisplay = added + lastPiece;
+								console.log(fromDisplay);
+								equalToCount--;
+							}	else {
+								let num1 = fromDisplay.slice(0, additionIndex);
+								let num2 = fromDisplay.slice(additionIndex + 1, firstSubtractionIndex);
+								let lastPiece = fromDisplay.slice(firstSubtractionIndex);
+								let added = Number(num1) + Number(num2);
+								fromDisplay = added + lastPiece;
+								console.log(fromDisplay);
+								equalToCount--;
+							}
 						} else if (additionIndex > firstSubtractionIndex && additionIndex < nextSubtractionIndex) {
 							let num1 = fromDisplay.slice(firstSubtractionIndex + 1, additionIndex);
 							let num2 = fromDisplay.slice(additionIndex + 1, nextSubtractionIndex);
@@ -1242,13 +1266,26 @@ function add (fromDisplay) {
 							fromDisplay = firstPiece + added + lastPiece;
 							console.log(fromDisplay);
 							firstSubtractionIndex = fromDisplay.indexOf('-', firstSubtractionIndex + 1);
+							console.log(fromDisplay);
+							equalToCount--;
+						} else if (additionIndex > lastSubtractionIndex) {
+							console.log('all addition last');
+							let num1 = fromDisplay.slice(lastSubtractionIndex + 1, additionIndex);
+							let num2 = fromDisplay.slice(additionIndex + 1, nextAdditionIndex);
+							let firstPiece = fromDisplay.slice(0,lastSubtractionIndex + 1);
+							let lastPiece = fromDisplay.slice(nextAdditionIndex);
+							let added = Number(num1) + Number(num2);
+							fromDisplay = firstPiece + added + lastPiece;
+							console.log(fromDisplay);
+							equalToCount--;
 						} else {
 							let num1 = fromDisplay.slice(nextSubtractionIndex + 1, additionIndex);
 							let num2 = fromDisplay.slice(additionIndex + 1);
 							let firstPiece = fromDisplay.slice(0,nextSubtractionIndex + 1);
 							let added = Number(num1) + Number(num2);
 							fromDisplay = firstPiece + added;
-							console.log(fromDisplay);	
+							console.log(fromDisplay);
+							equalToCount--;	
 						}
 					}	
 				} else {
