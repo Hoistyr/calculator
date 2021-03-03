@@ -215,6 +215,7 @@ function insertDisplay (input, ans) {
 	if (ans === undefined) {
 		ans = '';
 	}
+
 	if (currentlyOnscreen === '0') {
 	
 		
@@ -228,7 +229,7 @@ function insertDisplay (input, ans) {
 				isFirstNumber = false;
 
 			}
-			if (input === '.' || ans.includes('.')) {
+			if (input === '.') {
 				decimalAllowed = false;
 
 			}
@@ -839,9 +840,11 @@ function multiply (fromDisplay) {
 				
 			} else {	
 				console.log('multiplying more than two numbers');
-				if (fromDisplay.includes('+') 
+				if (fromDisplay.includes('*') 
+				|| fromDisplay.includes('+') 
 				|| fromDisplay.includes('-')
-				|| fromDisplay.includes('÷') ) {
+				|| fromDisplay.includes('÷') 
+				) {
 					console.log('complex multiplying')
 					let multiplyIndex = fromDisplay.indexOf('*');
 					let preMultiplyIndex = multiplyIndex - 1;
@@ -854,7 +857,8 @@ function multiply (fromDisplay) {
 					let lastPiece;
 					while (preReadyToMultiply === false || postReadyToMultiply === false) {
 						let preCharCheck = fromDisplay.charAt(preMultiplyIndex); 
-						if (preCharCheck === '÷'
+						if (preCharCheck === '*'
+						|| preCharCheck === '÷'
 						|| preCharCheck === '+'
 						|| preCharCheck === '-'
 						|| preCharCheck === ''
@@ -1350,6 +1354,7 @@ function subtract (fromDisplay) {
 
 function executionContinued (input) {
 	let fromDisplay = input;
+	console.log(ans);
 	if (typeof(ans) === 'object') {
 		ans = '0';
 	} else if (ans.includes('x_x')) {
@@ -1381,6 +1386,6 @@ function executionContinued (input) {
 	console.log('after subtract ' + fromDisplay);
 
 	displayText.textContent = fromDisplay;
-	ans = fromDisplay;
+	ans = fromDisplay.toString();
 	console.log('ans is now: ' + ans);
 }
