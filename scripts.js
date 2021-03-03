@@ -305,12 +305,30 @@ function insertDisplay (input, ans) {
 		 
 		//Only allows square root where valid
 		if (input === '√(') {
-			if ( previousChar !== '.'){
+			
+			if ( previousChar === '('
+			|| previousChar === '*'
+			|| previousChar === '÷'
+			|| previousChar === '+'
+			|| previousChar === '-'
+			){
 				displayText.textContent = currentlyOnscreen + input;
 				decimalAllowed = true;
 			} else {
-				input = '';
-				displayText.textContent = currentlyOnscreen + input;
+				if (currentlyOnscreen.includes('(') 
+				|| currentlyOnscreen.includes(')')
+				|| currentlyOnscreen.includes('*')
+				|| currentlyOnscreen.includes('÷')
+				|| currentlyOnscreen.includes('+')
+				|| currentlyOnscreen.includes('-')
+				|| currentlyOnscreen.includes('√')
+				) {
+					input = '';
+					displayText.textContent = currentlyOnscreen + input;
+				} else {
+					displayText.textContent = input + currentlyOnscreen + ')';
+				}
+				
 			}	
 		}
 		
